@@ -77,6 +77,9 @@ public class EarthquakeCityMap extends PApplet {
 	    // to create a new SimplePointMarker for each PointFeature in 
 	    // earthquakes.  Then add each new SimplePointMarker to the 
 	    // List markers (so that it will be added to the map in the line below)
+	    for (PointFeature earthquake : earthquakes) {
+	    	markers.add(createMarker(earthquake));
+	    }
 	    
 	    
 	    // Add the markers to the map so that they are displayed
@@ -106,8 +109,9 @@ public class EarthquakeCityMap extends PApplet {
 		float mag = Float.parseFloat(magObj.toString());
 		
 		// Here is an example of how to use Processing's color method to generate 
-	    // an int that represents the color yellow.  
-	    int yellow = color(255, 255, 0);
+	    int minor = color(169, 169, 169);	// grey
+	    int light = color(255, 255, 0);		// yellow
+	    int heavy = color(255, 0, 0);		// red
 		
 		// TODO (Step 4): Add code below to style the marker's size and color 
 	    // according to the magnitude of the earthquake.  
@@ -116,6 +120,16 @@ public class EarthquakeCityMap extends PApplet {
 	    // Rather than comparing the magnitude to a number directly, compare 
 	    // the magnitude to these variables (and change their value in the code 
 	    // above if you want to change what you mean by "moderate" and "light")
+	    if (mag < THRESHOLD_LIGHT) {
+	    	marker.setColor(minor);
+	    	marker.setRadius(5);
+	    } else if ( mag < THRESHOLD_MODERATE) {
+	    	marker.setColor(light);
+	    	marker.setRadius(8);
+	    } else {
+	    	marker.setColor(heavy);
+	    	marker.setRadius(13);
+	    }
 	    
 	    
 	    // Finally return the marker
@@ -123,7 +137,7 @@ public class EarthquakeCityMap extends PApplet {
 	}
 	
 	public void draw() {
-	    background(10);
+	    background(200);
 	    map.draw();
 	    addKey();
 	}
@@ -133,7 +147,25 @@ public class EarthquakeCityMap extends PApplet {
 	// TODO: Implement this method to draw the key
 	private void addKey() 
 	{	
-		// Remember you can use Processing's graphics methods here
+		// Draw a rectangle to hold keys
+		noStroke();
+		fill(color(255, 255, 255));
+		rect(20, 50, 160, 250, 7);
+		
+		textSize(12);
+		fill(0);
+		text("Earthquake Key", 40, 80);
+		text("5.0+ Magnitude", 60, 120);
+		text("4.0+ Magnitude", 60, 160);
+		text("Below 4.0", 60, 200);
+		
+		stroke(0);
+		fill(color(255, 0, 0));
+		ellipse(40, 115, 13, 13);
+		fill(color(255, 255, 0));
+		ellipse(40, 155, 8, 8);
+		fill(color(0, 0, 0));
+		ellipse(40, 195, 5, 5);
 	
 	}
 }

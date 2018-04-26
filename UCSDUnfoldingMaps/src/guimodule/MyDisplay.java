@@ -19,7 +19,7 @@ public class MyDisplay extends PApplet {
 		ellipse(140, 140, 40, 60);
 		ellipse(270, 140, 40, 60);
 		
-		arc(200, 260, 100, 100, 0, PI);
+		arc(200, 250, 100, 100, 0, PI);
 		
 	}
 

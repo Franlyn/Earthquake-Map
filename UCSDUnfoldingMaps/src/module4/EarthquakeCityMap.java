@@ -20,8 +20,8 @@ import processing.core.PApplet;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
- * Date: July 17, 2015
+ * @author Franlyn Liu
+ * Date: May 01, 2018
  * */
 public class EarthquakeCityMap extends PApplet {
 	
@@ -130,7 +130,6 @@ public class EarthquakeCityMap extends PApplet {
 	}
 	
 	// helper method to draw key in GUI
-	// TODO: Update this method as appropriate
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here
 		fill(255, 250, 240);
@@ -139,19 +138,38 @@ public class EarthquakeCityMap extends PApplet {
 		fill(0);
 		textAlign(LEFT, CENTER);
 		textSize(12);
-		text("Earthquake Key", 50, 75);
+		text("Earthquake Key", 50, 70);
 		
 		fill(color(255, 0, 0));
-		ellipse(50, 125, 15, 15);
-		fill(color(255, 255, 0));
-		ellipse(50, 175, 10, 10);
-		fill(color(0, 0, 255));
-		ellipse(50, 225, 5, 5);
+		triangle(45, 100, 50, 90, 55, 100);
+		fill(color(255, 255, 255));
+		ellipse(50, 125, 10, 10);
+		rect(45, 150, 10, 10);
 		
 		fill(0, 0, 0);
-		text("5.0+ Magnitude", 75, 125);
-		text("4.0+ Magnitude", 75, 175);
-		text("Below 4.0", 75, 225);
+		text("City Marker", 70, 95);
+		text("Land Marker", 70, 125);
+		text("Ocean Marker", 70, 153);
+		text("Size ~ Magnitude", 45, 175);
+		
+		fill(color(255, 255, 0));
+		ellipse(50, 200, 10, 10);
+		fill(color(0, 0, 255));
+		ellipse(50, 225, 10, 10);
+		fill(color(255, 0, 0));
+		ellipse(50, 250, 10, 10);
+		
+		fill(0, 0, 0);
+		text("Shallow", 70, 200);
+		text("Intermediate", 70, 225);
+		text("Deep", 70, 250);
+		
+		fill(255, 255, 255);
+		ellipse(50, 275, 10, 10);
+		line(45, 270, 55, 280);
+		line(55, 270, 45, 280);
+		fill(0, 0, 0);
+		text("Past Day", 70, 275);
 	}
 
 	
@@ -169,7 +187,9 @@ public class EarthquakeCityMap extends PApplet {
 		// and a Marker as input.  
 		// If isInCountry ever returns true, isLand should return true.
 		for (Marker m : countryMarkers) {
-			// TODO: Finish this method using the helper method isInCountry
+			if (isInCountry(earthquake, m)) {
+				return true;
+			}
 			
 		}
 		
@@ -186,7 +206,6 @@ public class EarthquakeCityMap extends PApplet {
 	 * */
 	private void printQuakes() 
 	{
-		// TODO: Implement this method
 		// One (inefficient but correct) approach is to:
 		//   Loop over all of the countries, e.g. using 
 		//        for (Marker cm : countryMarkers) { ... }
@@ -197,7 +216,18 @@ public class EarthquakeCityMap extends PApplet {
 		//     	and (2) if it is on land, that its country property matches 
 		//      the name property of the country marker.   If so, increment
 		//      the country's counter.
-		
+		for (Marker cm : countryMarkers) {
+			int quakeCounter = 0;
+			for (Marker em : quakeMarkers) {
+				//System.out.printf("Country: %s, name:%s\n", (String)em.getProperty("country"), (String)cm.getProperty("name"));
+				if (((EarthquakeMarker)em).isOnLand() && (String)em.getProperty("country") == (String)cm.getProperty("name")) {
+					quakeCounter++;
+				}
+			}
+			if (quakeCounter > 0) {
+				System.out.printf("%s: %d\n", (String)(cm.getProperty("name")), quakeCounter);
+			}
+		}
 		// Here is some code you will find useful:
 		// 
 		//  * To get the name of a country from a country marker in variable cm, use:

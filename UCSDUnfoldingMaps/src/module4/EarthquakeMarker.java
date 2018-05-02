@@ -1,5 +1,7 @@
 package module4;
 
+import java.awt.Color;
+
 import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import processing.core.PGraphics;
@@ -7,7 +9,7 @@ import processing.core.PGraphics;
 /** Implements a visual marker for earthquakes on an earthquake map
  * 
  * @author UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Franlyn Liu
  *
  */
 public abstract class EarthquakeMarker extends SimplePointMarker
@@ -37,6 +39,9 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	public static final float THRESHOLD_DEEP = 300;
 
 	// ADD constants for colors
+	public static final int YELLOW = new Color(255, 255, 0).getRGB();
+	public static final int BLUE = new Color(0, 0, 255).getRGB();
+	public static final int RED = new Color(255, 0, 0).getRGB();
 
 	
 	// abstract method implemented in derived classes
@@ -67,10 +72,22 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 		// call abstract method implemented in child class to draw marker shape
 		drawEarthquake(pg, x, y);
 		
-		// OPTIONAL TODO: draw X over marker if within past day		
+		// OPTIONAL TODO: draw X over marker if within past day	
+		drawDuration(pg, x, y);
 		
 		// reset to previous styling
 		pg.popStyle();
+		
+	}
+	
+	private void drawDuration (PGraphics pg, float x, float y) {
+		float rad = getRadius() / 2;
+		String age = getAge();
+		
+		if (age.equals("Past Hour") || age.equals("Past Day")) {
+			pg.line(x-rad, y-rad, x+rad, y+rad);
+			pg.line(x+rad, y-rad, x-rad, y+rad);
+		}
 		
 	}
 	
@@ -80,13 +97,23 @@ public abstract class EarthquakeMarker extends SimplePointMarker
 	// But this is up to you, of course.
 	// You might find the getters below helpful.
 	private void colorDetermine(PGraphics pg) {
-		//TODO: Implement this method
+		if (getDepth() < THRESHOLD_INTERMEDIATE) {
+			pg.fill(YELLOW);
+		} else if (getDepth() < THRESHOLD_DEEP) {
+			pg.fill(BLUE);
+		} else {
+			pg.fill(RED);
+		}
 	}
 	
 	
 	/*
 	 * getters for earthquake properties
 	 */
+	
+	public String getAge() {
+		return (getProperty("age").toString());
+	}
 	
 	public float getMagnitude() {
 		return Float.parseFloat(getProperty("magnitude").toString());
